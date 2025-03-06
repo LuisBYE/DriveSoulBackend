@@ -1,0 +1,12 @@
+# Ignorar la carpeta de configuración de Visual Studio
+.vs/
+
+# Ignorar archivos de solución
+*.sln
+
+# Ignorar carpetas de compilación
+bin/
+obj/
+
+# Otros archivos temporales o innecesarios que no quieras incluir
+*.log

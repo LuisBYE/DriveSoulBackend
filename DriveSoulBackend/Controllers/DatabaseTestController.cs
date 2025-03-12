@@ -15,7 +15,7 @@ namespace DriveSoulBackend.Controllers
             _context = context;
         }
 
-        [HttpGet("check-connection")]
+        [HttpGet]
         public IActionResult CheckConnection()
         {
             try

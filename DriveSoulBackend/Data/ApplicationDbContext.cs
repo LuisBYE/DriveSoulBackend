@@ -12,5 +12,6 @@ namespace DriveSoulBackend.Data // El namespace debe ser DriveSoulBackend.Data
 
         // DbSet para la entidad Producto
         public DbSet<Producto> Productos { get; set; }
+        public DbSet<Usuarios> Usuarios { get; set; }
     }
 }

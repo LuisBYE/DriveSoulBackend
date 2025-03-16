@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;  // <-- Asegúrate de agregar esta línea
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using DriveSoulBackend.Entities;  // Asegúrate de tener el espacio de nombres correcto para Producto
+using DriveSoulBackend.Data;
 
 namespace DriveSoulBackend.Controllers
 {
@@ -7,27 +11,44 @@ namespace DriveSoulBackend.Controllers
     [ApiController]
     public class UsuariosController : ControllerBase
     {
-        private readonly ILogger<UsuariosController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        // Constructor
-        public UsuariosController(ILogger<UsuariosController> logger)
+        public UsuariosController(ApplicationDbContext context)
         {
-            _logger = logger;
-            // Puedes usar Console.WriteLine en el constructor si lo deseas
-            Console.WriteLine("Prueba"); // Esto se ejecutará cuando se cree la instancia del controlador.
+            _context = context;
         }
 
-        // GET: api/<UsuariosController>
+        // GET: api/<Usuarios>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<IEnumerable<Usuarios>>> GetUsuarios()
         {
-            // Si usas un logger, puedes hacer algo así:
-            _logger.LogInformation("RUTA ENCONTRADA");
+            var usuarios = await _context.Usuarios.ToListAsync();
+            return Ok(usuarios);
+        }
 
-            // O si solo quieres imprimir en consola sin usar logger:
-            Console.WriteLine("RUTA ENCONTRADA");
+        // GET: api/Usuarios/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Usuarios>> GetUsuario(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
 
-            return Ok("Ruta de prueba exitosa");
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(usuario);
+        }
+
+        // POST api/<UsuariosController>
+        [HttpPost]
+        public async Task<ActionResult<Usuarios>> PostUsuario(Usuarios usuario)
+        {
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            // Aquí usamos "GetUsuario" porque es la acción que devolverá el recurso creado
+            return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
         }
     }
 }

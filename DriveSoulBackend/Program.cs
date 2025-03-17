@@ -1,6 +1,12 @@
 using Microsoft.EntityFrameworkCore; // Asegúrate de tener este using
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure; // Asegúrate de tener este using
 using DriveSoulBackend.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +35,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
     ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = "YourIssuer",  // Cambia a tu emisor
+            ValidAudience = "YourAudience",  // Cambia a tu audiencia
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKey"))  // Cambia a tu clave secreta
+        };
+    });
+
 var app = builder.Build();
 
 // Configuración del pipeline de solicitudes HTTP
@@ -38,12 +58,14 @@ if (!app.Environment.IsDevelopment())
     // El valor predeterminado de HSTS es de 30 días. Puedes cambiarlo para escenarios de producción.
     app.UseHsts();
 }
+builder.Services.AddAuthorization();
 
 //app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors("AllowMyOrigin");
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

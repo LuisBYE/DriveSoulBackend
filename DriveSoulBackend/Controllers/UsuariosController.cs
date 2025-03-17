@@ -4,14 +4,21 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DriveSoulBackend.Entities;  // Asegúrate de tener el espacio de nombres correcto para Producto
 using DriveSoulBackend.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using BCrypt.Net;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DriveSoulBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class UsuariosController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        //private readonly IConfiguration _config;
 
         public UsuariosController(ApplicationDbContext context)
         {
@@ -41,14 +48,45 @@ namespace DriveSoulBackend.Controllers
         }
 
         // POST api/<UsuariosController>
+
         [HttpPost]
         public async Task<ActionResult<Usuarios>> PostUsuario(Usuarios usuario)
         {
-            _context.Usuarios.Add(usuario);
+            // Verificar si el email ya existe en la base de datos
+            var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == usuario.Email);
+            if (usuarioExistente != null)
+            {
+                return BadRequest(new { mensaje = "El email ya está registrado" });
+            }
+
+            // Hashear la contraseña antes de guardarla
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(usuario.Password);
+
+            var newUser = new Usuarios
+            {
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                Email = usuario.Email,
+                Telefono = usuario.Telefono,
+                Ciudad = usuario.Ciudad,
+                Password = passwordHash, 
+                Rol = usuario.Rol ?? "Usuario" 
+            };
+
+            _context.Usuarios.Add(newUser);
             await _context.SaveChangesAsync();
 
-            // Aquí usamos "GetUsuario" porque es la acción que devolverá el recurso creado
-            return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
+            return CreatedAtAction("GetUsuario", new { id = newUser.Id }, newUser);
         }
+
+        // GetLogin 
+        //[HttpGet]
+        //public IActionResult LoginUser()
+        //{
+        //    var UsuarioId = User.FindFirst(ClaimTypes.NameIdentifier) ? ValueTask
+        //    return Ok(new {mensaje = "Bienvenido", UsuarioId})
+
+        //}
+
     }
 }

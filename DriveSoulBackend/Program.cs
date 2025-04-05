@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore; // Asegúrate de tener este using
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure; // Asegúrate de tener este using
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Microsoft.OpenApi.Models;
 using DriveSoulBackend.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -17,20 +18,34 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowMyOrigin",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000") // Reemplaza con el origen de tu frontend
-                  .AllowAnyMethod() // o especifica métodos concretos (GET, POST, PUT, DELETE)
+            policy.WithOrigins("http://localhost:3000") // Reemplázalo con el origen de tu frontend
+                  .AllowAnyMethod()
                   .AllowAnyHeader();
         });
 });
+
 // Añadir Controladores
 builder.Services.AddControllers();
-// https Forzado
-//builder.Services.AddHttpsRedirection(options =>
-//{
-//    options.HttpsPort = 7239; // Especifica el puerto HTTPS aquí (como está configurado en launchSettings.json)
-//});
 
-// Configuración de la conexión a la base de datos con MySQL
+// Configuración de Swagger con documentación mejorada
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "DriveSoul API",
+        Version = "v1",
+        Description = "API para gestionar DriveSoul",
+        Contact = new OpenApiContact
+        {
+            Name = "Luis",
+            Email = "luis_aleixsanchez@ceroca.com",
+            Url = new Uri("https://DriveSoul.com")
+        }
+    });
+});
+
+// Configuración de la conexión a MySQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
     ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
@@ -55,24 +70,33 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // El valor predeterminado de HSTS es de 30 días. Puedes cambiarlo para escenarios de producción.
     app.UseHsts();
 }
+<<<<<<< Updated upstream
 builder.Services.AddAuthorization();
+=======
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "DriveSoul API v1");
+        c.RoutePrefix = "swagger"; // Hace que Swagger UI esté disponible en "/swagger"
+    });
+}
+>>>>>>> Stashed changes
 
-//app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors("AllowMyOrigin");
 app.UseRouting();
+<<<<<<< Updated upstream
 
 app.UseAuthentication();
+=======
+>>>>>>> Stashed changes
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers(); // DEJA SOLO ESTA LÍNEA
-});
-
+app.MapControllers();
 app.MapRazorPages();
 
 app.Run();

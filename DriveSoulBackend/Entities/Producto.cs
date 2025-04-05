@@ -2,9 +2,11 @@ namespace DriveSoulBackend.Entities
 {
 public class Producto
 {
-    public int Id { get; set; } // ID del producto (clave primaria)
-    public string Nombre { get; set; } // Nombre del producto
-    public decimal Precio { get; set; } // Precio del producto
-    
-}
+        public int Id { get; set; } 
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+        public decimal Precio { get; set; }
+        public string Categoria { get; set; }
+
+    }
 }

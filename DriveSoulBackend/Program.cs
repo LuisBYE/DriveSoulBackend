@@ -6,9 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Agregar servicios al contenedor
@@ -72,9 +69,6 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
-<<<<<<< Updated upstream
-builder.Services.AddAuthorization();
-=======
 else
 {
     app.UseSwagger();
@@ -84,19 +78,16 @@ else
         c.RoutePrefix = "swagger"; // Hace que Swagger UI esté disponible en "/swagger"
     });
 }
->>>>>>> Stashed changes
 
 app.UseStaticFiles();
 app.UseCors("AllowMyOrigin");
 app.UseRouting();
-<<<<<<< Updated upstream
 
 app.UseAuthentication();
-=======
->>>>>>> Stashed changes
 app.UseAuthorization();
 
 app.MapControllers();
 app.MapRazorPages();
 
 app.Run();
+

@@ -13,5 +13,16 @@ namespace DriveSoulBackend.Data // El namespace debe ser DriveSoulBackend.Data
         // DbSet para la entidad Producto
         public DbSet<Producto> Productos { get; set; }
         public DbSet<Usuarios> Usuarios { get; set; }
+        public DbSet<CocheEntity> Coches { get; set; }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
+
+        //    modelBuilder.Entity<CocheEntity>()
+        //        .HasOne(c => c.Producto)  // Relación entre CocheEntity y Producto
+        //        .WithMany(p => p.Coches)  // Producto puede tener muchos Coches
+        //        .HasForeignKey(c => c.ProductoId);  // Relación con la clave foránea ProductoId en CocheEntity
+        //}
     }
 }

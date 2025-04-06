@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;  // <-- Asegúrate de agregar esta línea
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using DriveSoulBackend.DTO.ProductosDTO; // Asegúrate de tener el espacio de nombres correcto para ListarProducto
+using DriveSoulBackend.DTO.CochesDTO; // Asegúrate de tener el espacio de nombres correcto para ListarProducto
 using DriveSoulBackend.Entities;  // Asegúrate de tener el espacio de nombres correcto para Producto
 using DriveSoulBackend.Data;
 
@@ -28,6 +30,7 @@ namespace DriveSoulBackend.Controllers
             var productos = await _context.Productos
                 .Select(p => new ListarProductoDTO // Con Select(...), convierte cada entidad Producto en un DTO ListarProducto
                 {
+                    id= p.id,
                     Nombre = p.Nombre,
                     Descripcion = p.Descripcion,
                     Precio = p.Precio,
@@ -38,7 +41,9 @@ namespace DriveSoulBackend.Controllers
 
 
         }
+        // GET: api/<ProductoController> 
 
+       
 
         // GET api/<ProductoController>/
         //[HttpGet("{id}")]

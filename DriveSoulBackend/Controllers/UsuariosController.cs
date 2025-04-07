@@ -9,6 +9,8 @@ using System.Security.Claims;
 using BCrypt.Net;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+// Añadir referencia a los DTOs
+using DriveSoulBackend.Dtos;
 
 namespace DriveSoulBackend.Controllers
 {
@@ -87,6 +89,44 @@ namespace DriveSoulBackend.Controllers
         //    return Ok(new {mensaje = "Bienvenido", UsuarioId})
 
         //}
+
+        // POST: api/Usuarios/login
+        [HttpPost("login")]
+        public async Task<ActionResult> Login([FromBody] LoginDTO loginDto)
+        {
+            if (loginDto == null || string.IsNullOrEmpty(loginDto.Identificador) || string.IsNullOrEmpty(loginDto.Password))
+            {
+                return BadRequest(new { mensaje = "Datos de login incompletos" });
+            }
+
+            // Buscar usuario por nombre o email
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.Nombre == loginDto.Identificador || u.Email == loginDto.Identificador);
+
+            if (usuario == null)
+            {
+                return NotFound(new { mensaje = "Usuario no encontrado" });
+            }
+
+            // Verificar contraseña
+            bool passwordValida = BCrypt.Net.BCrypt.Verify(loginDto.Password, usuario.Password);
+            if (!passwordValida)
+            {
+                return Unauthorized(new { mensaje = "Contraseña incorrecta" });
+            }
+
+            // Devolver datos del usuario (excepto la contraseña)
+            return Ok(new
+            {
+                Id = usuario.Id,
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                Email = usuario.Email,
+                Telefono = usuario.Telefono,
+                Ciudad = usuario.Ciudad,
+                Rol = usuario.Rol
+            });
+        }
 
     }
 }

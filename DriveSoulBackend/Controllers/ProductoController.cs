@@ -41,23 +41,23 @@ namespace DriveSoulBackend.Controllers
 
 
         }
-        // GET: api/<ProductoController> 
+        [HttpPost]
+        public async Task<ActionResult<Producto>> PostProducto(CrearProductoDto crearProductoDto)
+        {
+            var nuevoProducto = new Producto
+            {
+                id = crearProductoDto.id,
+                Nombre = crearProductoDto.Nombre,
+                Descripcion = crearProductoDto.Descripcion,
+                Precio = crearProductoDto.Precio,
+                Categoria = crearProductoDto.Categoria
+            };
 
-       
+            _context.Productos.Add(nuevoProducto); // Asumiendo que tu DbSet se llama Productos
+            await _context.SaveChangesAsync();
 
-        // GET api/<ProductoController>/
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Producto>> GetProducto(int id)
-        //{
-        //    var producto = await _context.Productos.FindAsync(id);
-
-        //    if (producto == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(producto);
-        //}
+            return CreatedAtAction("GetProducto", new { id = nuevoProducto.id }, nuevoProducto);
+        }
 
     }
 }

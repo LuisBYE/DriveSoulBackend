@@ -17,5 +17,8 @@ namespace DriveSoulBackend.DTO.CochesDTO
 		public string tipo_combustible { get; set; }
 		public string transmision { get; set; }
 
-	}
+		public string modeloNombre { get; set; }
+        public string marcaNombre { get; set; }
+
+    }
 }

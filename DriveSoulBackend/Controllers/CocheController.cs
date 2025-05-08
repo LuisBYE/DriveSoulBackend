@@ -41,32 +41,33 @@ namespace DriveSoulBackend.Controllers
             return Ok(coches);
 
         }
-        [HttpGet("ListarCoches")]
-        public async Task<ActionResult<IEnumerable<ListarProductoCocheDTO>>> GetCochesConDatosDelProducto()
-        {
-            var productosConCoches = await _context.Productos
-                .Join(_context.Coches,
-                      p => p.id,           // Relacionamos Producto.Id con CocheEntity.ProductoId
-                      c => c.producto_id,  // ProductoId es la clave foránea en CocheEntity
-                      (p, c) => new ListarProductoCocheDTO
-                      {
-                          nombre = p.Nombre,         // Usa p.Nombre en lugar de p.nombre
-                          descripcion = p.Descripcion, // Usa p.Descripcion en lugar de p.descripcion
-                          precio = p.Precio,          // Usa p.Precio en lugar de p.precio
-                          categoria = p.Categoria,    // Usa p.Categoria en lugar de p.categoria
+        //[HttpGet("ListarCoches")]
+        //public async Task<ActionResult<IEnumerable<ListarProductoCocheDTO>>> GetCochesConDatosDelProducto()
+        //{
+        //    var productosConCoches = await (from p in _context.Productos
+        //                                    join c in _context.Coches on p.id equals c.producto_id
+        //                                    join modelo in _context.Modelos on c.modelo_id equals modelo.id
+        //                                    join marca in _context.Marcas on modelo.marca_id equals marca.id
+        //                                    select new ListarProductoCocheDTO
+        //                                    {
+        //                                        nombre = p.Nombre,
+        //                                        descripcion = p.Descripcion,
+        //                                        precio = p.Precio,
+        //                                        categoria = p.Categoria,
 
-                          // Datos de la tabla Coches
-                          modelo_id = c.modelo_id,
-                          anio = c.anio,
-                          kilometraje = c.kilometraje,
-                          color = c.color,
-                          tipo_combustible = c.tipo_combustible,
-                          transmision = c.transmision
-                      })
-                .ToListAsync();
+        //                                        modelo_id = c.modelo_id,
+        //                                        anio = c.anio,
+        //                                        kilometraje = c.kilometraje,
+        //                                        color = c.color,
+        //                                        tipo_combustible = c.tipo_combustible,
+        //                                        transmision = c.transmision,
 
-            return Ok(productosConCoches);
-        }
+        //                                        modeloNombre = modelo.nombre,
+        //                                        marcaNombre = marca.nombre
+        //                                    }).ToListAsync();
+
+        //    return Ok(productosConCoches);
+        //}
 
     }
 }

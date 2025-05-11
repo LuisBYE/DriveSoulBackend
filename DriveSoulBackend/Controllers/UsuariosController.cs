@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore;  // <-- Asegúrate de agregar esta línea
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DriveSoulBackend.Entities;  // Asegúrate de tener el espacio de nombres correcto para Producto
+using DriveSoulBackend.Entities;
+using DriveSoulBackend.DTO.UsuarioDTO; // Asegúrate de tener el espacio de nombres correcto para Producto
 using DriveSoulBackend.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -81,15 +82,7 @@ namespace DriveSoulBackend.Controllers
             return CreatedAtAction("GetUsuario", new { id = newUser.Id }, newUser);
         }
 
-        // GetLogin 
-        //[HttpGet]
-        //public IActionResult LoginUser()
-        //{
-        //    var UsuarioId = User.FindFirst(ClaimTypes.NameIdentifier) ? ValueTask
-        //    return Ok(new {mensaje = "Bienvenido", UsuarioId})
-
-        //}
-
+  
         // POST: api/Usuarios/login
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDTO loginDto)
@@ -126,6 +119,49 @@ namespace DriveSoulBackend.Controllers
                 Ciudad = usuario.Ciudad,
                 Rol = usuario.Rol
             });
+        }
+
+
+        // PUT: api/Usuarios/{id}
+        [HttpPut("{id}")]
+        public async Task<ActionResult> PutUsuario(int id, [FromBody] UsuarioDTO updatedUsuario)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+
+            if (usuario == null)
+            {
+                return NotFound(new { mensaje = "Usuario no encontrado" });
+            }
+
+            // Actualizar solo los campos que no están vacíos
+            usuario.Nombre = string.IsNullOrWhiteSpace(updatedUsuario.Nombre) ? usuario.Nombre : updatedUsuario.Nombre;
+            usuario.Apellido = string.IsNullOrWhiteSpace(updatedUsuario.Apellido) ? usuario.Apellido : updatedUsuario.Apellido;
+            usuario.Email = string.IsNullOrWhiteSpace(updatedUsuario.Email) ? usuario.Email : updatedUsuario.Email;
+            usuario.Telefono = string.IsNullOrWhiteSpace(updatedUsuario.Telefono) ? usuario.Telefono : updatedUsuario.Telefono;
+            usuario.Ciudad = string.IsNullOrWhiteSpace(updatedUsuario.Ciudad) ? usuario.Ciudad : updatedUsuario.Ciudad;
+            usuario.Rol = string.IsNullOrWhiteSpace(updatedUsuario.Rol) ? usuario.Rol : updatedUsuario.Rol;
+
+            _context.Entry(usuario).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensaje = "Usuario actualizado correctamente" });
+        }
+
+        // DELETE: api/Usuarios/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUsuario(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+
+            if (usuario == null)
+            {
+                return NotFound(new { mensaje = "Usuario no encontrado" });
+            }
+
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensaje = "Usuario eliminado correctamente" });
         }
 
     }

@@ -33,7 +33,7 @@ namespace DriveSoulBackend.Controllers
                     id= p.id,
                     Nombre = p.Nombre,
                     Descripcion = p.Descripcion,
-                    Precio = p.Precio,
+                    Precio = p.Precio,          
                     Categoria = p.Categoria
                 })
                 .ToListAsync(); // trae todos los productos de la base de datos.

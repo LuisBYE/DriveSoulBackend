@@ -41,33 +41,33 @@ namespace DriveSoulBackend.Controllers
             return Ok(coches);
 
         }
-        //[HttpGet("ListarCoches")]
-        //public async Task<ActionResult<IEnumerable<ListarProductoCocheDTO>>> GetCochesConDatosDelProducto()
-        //{
-        //    var productosConCoches = await (from p in _context.Productos
-        //                                    join c in _context.Coches on p.id equals c.producto_id
-        //                                    join modelo in _context.Modelos on c.modelo_id equals modelo.id
-        //                                    join marca in _context.Marcas on modelo.marca_id equals marca.id
-        //                                    select new ListarProductoCocheDTO
-        //                                    {
-        //                                        nombre = p.Nombre,
-        //                                        descripcion = p.Descripcion,
-        //                                        precio = p.Precio,
-        //                                        categoria = p.Categoria,
+        [HttpGet("ListarCoches")]
+        public async Task<ActionResult<IEnumerable<ListarProductoCocheDTO>>> GetCochesConDatosDelProducto()
+        {
+            var productosConCoches = await (from p in _context.Productos
+                                            join c in _context.Coches on p.id equals c.producto_id
+                                            join modelo in _context.Modelos on c.modelo_id equals modelo.id
+                                            join marca in _context.Marcas on modelo.marca_id equals marca.id
+                                            select new ListarProductoCocheDTO
+                                            {
+                                                nombre = p.Nombre,
+                                                descripcion = p.Descripcion,
+                                                precio = p.Precio,
+                                                categoria = p.Categoria,
 
-        //                                        modelo_id = c.modelo_id,
-        //                                        anio = c.anio,
-        //                                        kilometraje = c.kilometraje,
-        //                                        color = c.color,
-        //                                        tipo_combustible = c.tipo_combustible,
-        //                                        transmision = c.transmision,
+                                                modelo_id = c.modelo_id,
+                                                anio = c.anio,
+                                                kilometraje = c.kilometraje,
+                                                color = c.color,
+                                                tipo_combustible = c.tipo_combustible,
+                                                transmision = c.transmision,
 
-        //                                        modeloNombre = modelo.nombre,
-        //                                        marcaNombre = marca.nombre
-        //                                    }).ToListAsync();
+                                                modeloNombre = modelo.nombre,
+                                                marcaNombre = marca.nombre
+                                            }).ToListAsync();
 
-        //    return Ok(productosConCoches);
-        //}
+            return Ok(productosConCoches);
+        }
 
     }
 }

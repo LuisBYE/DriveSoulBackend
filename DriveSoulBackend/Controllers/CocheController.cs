@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;  // <-- Asegúrate de agregar esta línea
+using Microsoft.EntityFrameworkCore;  // <-- Asegï¿½rate de agregar esta lï¿½nea
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DriveSoulBackend.DTO.CochesDTO; // Asegúrate de tener el espacio de nombres correcto para ListarProducto
-using DriveSoulBackend.Entities;  // Asegúrate de tener el espacio de nombres correcto para Producto
+using DriveSoulBackend.DTO.CochesDTO; // Asegï¿½rate de tener el espacio de nombres correcto para ListarProducto
+using DriveSoulBackend.Entities;  // Asegï¿½rate de tener el espacio de nombres correcto para Producto
 using DriveSoulBackend.Data;
 
 namespace DriveSoulBackend.Controllers
@@ -21,7 +21,7 @@ namespace DriveSoulBackend.Controllers
 
 
         // GET: api/<ProductoController>
-        // Para usar el postman La dirección es http://localhost:5000/api/Producto
+        // Para usar el postman La direcciï¿½n es http://localhost:5000/api/Producto
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ListarCochesDTO>>> GetCoches()
         {
@@ -50,6 +50,7 @@ namespace DriveSoulBackend.Controllers
                                             join marca in _context.Marcas on modelo.marca_id equals marca.id
                                             select new ListarProductoCocheDTO
                                             {
+                                                producto_id = p.id,
                                                 nombre = p.Nombre,
                                                 descripcion = p.Descripcion,
                                                 precio = p.Precio,

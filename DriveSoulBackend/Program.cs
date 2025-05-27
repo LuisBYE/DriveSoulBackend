@@ -20,8 +20,8 @@ builder.Services.AddCors(options =>
                     "http://localhost:5173",     // Vite default port
                     "http://127.0.0.1:3000",
                     "http://127.0.0.1:5173",
-                    "http://192.168.1.100:3000", // Reemplaza con tu IP local
-                    "http://192.168.1.100:5173"  // Reemplaza con tu IP local
+                    "http://192.168.1.17:3000", // Reemplaza con tu IP local
+                    "http://192.168.1.17:5173"  // Reemplaza con tu IP local
                 )
                 .AllowAnyMethod()
                 .AllowAnyHeader()

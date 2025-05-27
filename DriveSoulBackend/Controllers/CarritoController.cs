@@ -172,10 +172,26 @@ namespace DriveSoulBackend.Controllers
 
                 if (itemExistente != null)
                 {
-                    // Si existe, actualizar la cantidad
+                    // Si existe, actualizar la cantidad sumando la nueva cantidad
                     itemExistente.Cantidad += dto.Cantidad;
                     itemExistente.FechaActualizacion = DateTime.UtcNow;
                     _context.Entry(itemExistente).State = EntityState.Modified;
+
+                    await _context.SaveChangesAsync();
+
+                    // Devolver el item actualizado
+                    return Ok(new { 
+                        mensaje = "Cantidad del producto actualizada en el carrito",
+                        item = new CarritoDTO
+                        {
+                            Id = itemExistente.Id,
+                            UsuarioId = itemExistente.UsuarioId,
+                            ProductoId = itemExistente.ProductoId,
+                            Cantidad = itemExistente.Cantidad,
+                            FechaCreacion = itemExistente.FechaCreacion,
+                            FechaActualizacion = itemExistente.FechaActualizacion
+                        }
+                    });
                 }
                 else
                 {
@@ -188,28 +204,22 @@ namespace DriveSoulBackend.Controllers
                         FechaCreacion = DateTime.UtcNow
                     };
                     _context.Carritos.Add(nuevoItem);
+                    await _context.SaveChangesAsync();
+
+                    // Devolver el nuevo item
+                    return Ok(new { 
+                        mensaje = "Producto agregado al carrito exitosamente",
+                        item = new CarritoDTO
+                        {
+                            Id = nuevoItem.Id,
+                            UsuarioId = nuevoItem.UsuarioId,
+                            ProductoId = nuevoItem.ProductoId,
+                            Cantidad = nuevoItem.Cantidad,
+                            FechaCreacion = nuevoItem.FechaCreacion,
+                            FechaActualizacion = nuevoItem.FechaActualizacion
+                        }
+                    });
                 }
-
-                await _context.SaveChangesAsync();
-
-                // Devolver el item actualizado o creado
-                var itemActualizado = await _context.Carritos
-                    .Where(c => c.UsuarioId == dto.UsuarioId && c.ProductoId == dto.ProductoId)
-                    .Select(c => new CarritoDTO
-                    {
-                        Id = c.Id,
-                        UsuarioId = c.UsuarioId,
-                        ProductoId = c.ProductoId,
-                        Cantidad = c.Cantidad,
-                        FechaCreacion = c.FechaCreacion,
-                        FechaActualizacion = c.FechaActualizacion
-                    })
-                    .FirstOrDefaultAsync();
-
-                return Ok(new { 
-                    mensaje = "Producto agregado al carrito exitosamente",
-                    item = itemActualizado 
-                });
             }
             catch (Exception ex)
             {

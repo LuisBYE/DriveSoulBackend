@@ -15,10 +15,17 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowMyOrigin",
         policy =>
         {
-            policy.AllowAnyOrigin()  // Permite cualquier origen
-                  .AllowAnyMethod()  // Permite cualquier método HTTP
-                  .AllowAnyHeader()  // Permite cualquier header
-                  .AllowCredentials(); // Permite credenciales
+            policy.WithOrigins(
+                    "http://localhost:3000",     // React default port
+                    "http://localhost:5173",     // Vite default port
+                    "http://127.0.0.1:3000",
+                    "http://127.0.0.1:5173",
+                    "http://192.168.1.100:3000", // Reemplaza con tu IP local
+                    "http://192.168.1.100:5173"  // Reemplaza con tu IP local
+                )
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
         });
 });
 

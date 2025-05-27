@@ -15,16 +15,17 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowMyOrigin",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000") // Reemplázalo con el origen de tu frontend
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
+            policy.AllowAnyOrigin()  // Permite cualquier origen
+                  .AllowAnyMethod()  // Permite cualquier mÃ©todo HTTP
+                  .AllowAnyHeader()  // Permite cualquier header
+                  .AllowCredentials(); // Permite credenciales
         });
 });
 
-// Añadir Controladores
+// AÃ±adir Controladores
 builder.Services.AddControllers();
 
-// Configuración de Swagger con documentación mejorada
+// ConfiguraciÃ³n de Swagger con documentaciÃ³n mejorada
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -42,7 +43,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Configuración de la conexión a MySQL
+// ConfiguraciÃ³n de la conexiÃ³n a MySQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
     ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
@@ -55,15 +56,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
-            ValidIssuer = "YourIssuer",  // Cambia a tu emisor
-            ValidAudience = "YourAudience",  // Cambia a tu audiencia
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKey"))  // Cambia a tu clave secreta
+            ValidIssuer = "YourIssuer",
+            ValidAudience = "YourAudience",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKey"))
         };
     });
 
 var app = builder.Build();
 
-// Configuración del pipeline de solicitudes HTTP
+// ConfiguraciÃ³n del pipeline de solicitudes HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -75,7 +76,7 @@ else
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "DriveSoul API v1");
-        c.RoutePrefix = "swagger"; // Hace que Swagger UI esté disponible en "/swagger"
+        c.RoutePrefix = "swagger";
     });
 }
 

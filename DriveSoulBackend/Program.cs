@@ -5,27 +5,26 @@ using DriveSoulBackend.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configurar Kestrel para escuchar en todas las interfaces
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5000); // Escuchar en todas las interfaces en el puerto 5000
+});
 
 // Agregar servicios al contenedor
 builder.Services.AddRazorPages();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowMyOrigin",
+    options.AddPolicy("AllowAll",
         policy =>
         {
-            policy.WithOrigins(
-                    "http://localhost:3000",     // React default port
-                    "http://localhost:5173",     // Vite default port
-                    "http://127.0.0.1:3000",
-                    "http://127.0.0.1:5173",
-                    "http://192.168.1.17:3000", // Reemplaza con tu IP local
-                    "http://192.168.1.17:5173"  // Reemplaza con tu IP local
-                )
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
         });
 });
 
@@ -88,7 +87,7 @@ else
 }
 
 app.UseStaticFiles();
-app.UseCors("AllowMyOrigin");
+app.UseCors("AllowAll");
 app.UseRouting();
 
 app.UseAuthentication();

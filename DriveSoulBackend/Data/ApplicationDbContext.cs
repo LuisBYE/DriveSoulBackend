@@ -18,6 +18,8 @@ namespace DriveSoulBackend.Data // El namespace debe ser DriveSoulBackend.Data
         public DbSet<MarcaEntity> Marcas { get; set; }
         public DbSet<ModeloEntity> Modelos { get; set; }
         public DbSet<ImagenEntity> Imagenes { get; set; }
+        public DbSet<PedidoEntity> Pedidos { get; set; }
+        public DbSet<PedidoItemEntity> PedidoItems { get; set; }
 
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)

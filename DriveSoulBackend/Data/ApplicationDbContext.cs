@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using DriveSoulBackend.Entities; // Asegúrate de incluir la referencia a tu clase Producto
+using DriveSoulBackend.Entities; // Asegï¿½rate de incluir la referencia a tu clase Producto
 
 namespace DriveSoulBackend.Data // El namespace debe ser DriveSoulBackend.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        // El constructor recibe las opciones de configuración para el contexto
+        // El constructor recibe las opciones de configuraciï¿½n para el contexto
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -17,6 +17,7 @@ namespace DriveSoulBackend.Data // El namespace debe ser DriveSoulBackend.Data
         public DbSet<CocheEntity> Coches { get; set; }
         public DbSet<MarcaEntity> Marcas { get; set; }
         public DbSet<ModeloEntity> Modelos { get; set; }
+        public DbSet<ImagenEntity> Imagenes { get; set; }
 
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,9 +25,9 @@ namespace DriveSoulBackend.Data // El namespace debe ser DriveSoulBackend.Data
         //    base.OnModelCreating(modelBuilder);
 
         //    modelBuilder.Entity<CocheEntity>()
-        //        .HasOne(c => c.Producto)  // Relación entre CocheEntity y Producto
+        //        .HasOne(c => c.Producto)  // Relaciï¿½n entre CocheEntity y Producto
         //        .WithMany(p => p.Coches)  // Producto puede tener muchos Coches
-        //        .HasForeignKey(c => c.ProductoId);  // Relación con la clave foránea ProductoId en CocheEntity
+        //        .HasForeignKey(c => c.ProductoId);  // Relaciï¿½n con la clave forï¿½nea ProductoId en CocheEntity
         //}
     }
 }

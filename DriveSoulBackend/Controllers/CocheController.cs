@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DriveSoulBackend.DTO.CochesDTO; // Aseg�rate de tener el espacio de nombres correcto para ListarProducto
 using DriveSoulBackend.Entities;  // Aseg�rate de tener el espacio de nombres correcto para Producto
 using DriveSoulBackend.Data;
+using System.Linq;
 
 namespace DriveSoulBackend.Controllers
 {
@@ -66,6 +67,17 @@ namespace DriveSoulBackend.Controllers
                                                 modeloNombre = modelo.nombre,
                                                 marcaNombre = marca.nombre
                                             }).ToListAsync();
+
+            // Obtener las imágenes para cada coche
+            foreach (var coche in productosConCoches)
+            {
+                var imagenes = await _context.Imagenes
+                    .Where(i => i.ProductoId == coche.producto_id)
+                    .Select(i => i.Url)
+                    .ToListAsync();
+                
+                coche.imagenes = imagenes;
+            }
 
             return Ok(productosConCoches);
         }

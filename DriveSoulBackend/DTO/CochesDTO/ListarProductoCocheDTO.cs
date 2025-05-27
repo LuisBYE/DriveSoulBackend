@@ -20,5 +20,7 @@ namespace DriveSoulBackend.DTO.CochesDTO
 		public string modeloNombre { get; set; }
         public string marcaNombre { get; set; }
 
+        // Lista de URLs de imágenes
+        public List<string> imagenes { get; set; } = new List<string>();
     }
 }
